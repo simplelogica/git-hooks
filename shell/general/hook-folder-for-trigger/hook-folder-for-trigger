@@ -1,0 +1,47 @@
+#!/bin/bash
+
+WARNING='\033[1;33m' # Yellow
+ERROR='\033[0;31m' # Red
+NC='\033[0m' # No Color
+
+script_dir=$(dirname $0) # Current directory (Hooks folder)
+hook_name=$(basename $0) # Name of this file
+hook_dir="$script_dir/$hook_name.d" # Directory when u place hooks with this trigger kind
+
+if [ -d "$hook_dir" ]; then
+  # Iterate over executable files on folder sorted alfabetically
+  for file in `find $hook_dir -name "*" -type f -executable | sort -n`
+    do
+    header=`head -n 1 $file` # Reads the first line of script to determine language
+    case $header in
+    	"#!/bin/sh") # Shell Script
+        if ! $file; then
+          exit 1
+        fi
+    		;;
+      "#!/bin/bash") # Bash Script
+        if ! $file; then
+          exit 1
+        fi
+    		;;
+    	"#!/usr/bin/env ruby") # Ruby Script
+        if ! ruby $file; then
+          exit 1
+        fi
+    		;;
+      "#!/usr/bin/python3") # Python Script
+        if ! python3 $file; then
+          exit 1
+        fi
+    		;;
+      # You can add more scripting languages here
+      *)
+        printf "${ERROR}Error: Script Lang for $file not found ${NC}\n"
+        exit 1
+        ;;
+    esac
+  done
+else
+  printf "${WARNING}Warning: Folder $hook_dir not found ${NC}\n"
+fi
+exit 0
