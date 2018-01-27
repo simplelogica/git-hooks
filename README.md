@@ -23,7 +23,7 @@ This is the script file that contains the code, in certain scripting language, t
 #### Location:
 /language/trigger/functionality/hook
 ### README Hook file
-Here you can put all the information of your hooks.
+Here you can put all the information of your hooks. To make this step easier you can follow the template HOOK_README.md under .github repository
 #### Location:
 /language/trigger/functionality/README.md
 
